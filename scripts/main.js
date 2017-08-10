@@ -46,19 +46,24 @@ Dash.prototype.initFirebase = function() {
 
 // Loads Cards history and listens for upcoming ones.
 Dash.prototype.loadCards = function() {
-  // Reference to the /Cards/ database path.
-  this.CardsRef = this.database.ref('Cards');
-  // Make sure we remove all previous listeners.
-  this.CardsRef.off();
+  // Check that the user is signed in. CardForm
+  if (this.checkSignedInWithMessage()) {
+    var currentUser = this.auth.currentUser;
+    // Reference to the /Cards/ database path.
+    var userId = currentUser.uid;
+    this.CardsRef = this.database.ref(userId+"/Cards");
+    // Make sure we remove all previous listeners.
+    this.CardsRef.off();
 
-  // Loads the last 12 Cards and listen for new ones.
-  var setCard = function(data) {
-    var val = data.val();
-    this.displayCard(data.key, val.task, val.notes, val.seconds);
-  }.bind(this);
-  //TODO: think about limit to last 12
-  this.CardsRef.limitToLast(12).on('child_added', setCard);
-  this.CardsRef.limitToLast(12).on('child_changed', setCard);
+    // Loads the last 12 Cards and listen for new ones.
+    var setCard = function(data) {
+      var val = data.val();
+      this.displayCard(data.key, val.task, val.notes, val.seconds)
+    }.bind(this);
+    //TODO: think about limit to last 12
+    this.CardsRef.limitToLast(12).on('child_added', setCard);
+    this.CardsRef.limitToLast(12).on('child_changed', setCard);
+  }
 };
 
 // Saves a new Card on the Firebase DB.
@@ -111,6 +116,13 @@ Dash.prototype.closeCard = function(key){
   //get numeric id
   var cardId = key.match(/\d/g);
   cardId = cardId.join("");
+  //delete from database
+  /*if (this.checkSignedInWithMessage()) {
+    // Delete the Card entry from the Firebase Database with the key.
+    this.CardsRef.remove(key).catch(function(error) {
+      console.error('Error deleteing a card from Firebase Database', error);
+    });
+  }*/
 };
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
