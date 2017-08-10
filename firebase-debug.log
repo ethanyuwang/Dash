@@ -1,0 +1,72 @@
+[debug] [2017-08-07T02:51:07.852Z] ----------------------------------------------------------------------
+[debug] [2017-08-07T02:51:07.854Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ethan\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-08-07T02:51:07.855Z] CLI Version:   3.9.2
+[debug] [2017-08-07T02:51:07.855Z] Platform:      win32
+[debug] [2017-08-07T02:51:07.855Z] Node Version:  v6.10.2
+[debug] [2017-08-07T02:51:07.855Z] Time:          Sun Aug 06 2017 19:51:07 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:07.855Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-07T02:51:07.875Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-07T02:51:07.876Z] > authorizing via signed-in user
+[debug] [2017-08-07T02:51:07.877Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-07T02:51:07.878Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ug6O6mvd07xcrP_-zX9HeXRX8jg9RPkI3YMKlH93oWYsF3KGcJ06fPUt68ouEjsz',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Sun Aug 06 2017 19:51:07 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:08.191Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-07T02:51:08.200Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/dash-651e7  
+ Sun Aug 06 2017 19:51:08 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:09.180Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-07T02:51:09.181Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/dash-651e7/tokens  
+ Sun Aug 06 2017 19:51:09 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:09.702Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\ethan\Documents\GitHub\Dash'...
+[info] 
+[debug] [2017-08-07T02:51:09.711Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/dash-651e7  
+ Sun Aug 06 2017 19:51:09 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:10.216Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-07T02:51:10.216Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/303116377423/clients/_:getWebAppConfig  
+ Sun Aug 06 2017 19:51:10 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-07T02:51:10.713Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2017-08-09T02:25:19.271Z] ----------------------------------------------------------------------
+[debug] [2017-08-09T02:25:19.273Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ethan\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-08-09T02:25:19.274Z] CLI Version:   3.9.2
+[debug] [2017-08-09T02:25:19.274Z] Platform:      win32
+[debug] [2017-08-09T02:25:19.274Z] Node Version:  v6.10.2
+[debug] [2017-08-09T02:25:19.274Z] Time:          Tue Aug 08 2017 19:25:19 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:19.274Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-09T02:25:19.294Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-09T02:25:19.294Z] > authorizing via signed-in user
+[debug] [2017-08-09T02:25:19.296Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-09T02:25:19.296Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ug6O6mvd07xcrP_-zX9HeXRX8jg9RPkI3YMKlH93oWYsF3KGcJ06fPUt68ouEjsz',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Tue Aug 08 2017 19:25:19 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:19.583Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-09T02:25:19.595Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/dash-651e7  
+ Tue Aug 08 2017 19:25:19 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:20.265Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-09T02:25:20.267Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/dash-651e7/tokens  
+ Tue Aug 08 2017 19:25:20 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:21.282Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\ethan\Documents\GitHub\Dash'...
+[info] 
+[debug] [2017-08-09T02:25:21.291Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/dash-651e7  
+ Tue Aug 08 2017 19:25:21 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:21.785Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-09T02:25:21.785Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/303116377423/clients/_:getWebAppConfig  
+ Tue Aug 08 2017 19:25:21 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-08-09T02:25:22.424Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./
+[info] +  hosting: Local server: http://localhost:5000
+
