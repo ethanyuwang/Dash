@@ -108,21 +108,19 @@ Dash.prototype.signOut = function() {
 };
 
 // close a card
-Dash.prototype.closeCard = function(key){
-  //e.stopPropagation();  
-  var $target = $('.'+key);
-  //var $target = $(this).parents('.sprintCard');
-  $target.hide(function(){ $target.remove(); });
-  //get numeric id
-  var cardId = key.match(/\d/g);
-  cardId = cardId.join("");
+Dash.prototype.closeCard = function(e, key){
+  e.preventDefault(); 
   //delete from database
-  /*if (this.checkSignedInWithMessage()) {
+  if (this.checkSignedInWithMessage()) {
     // Delete the Card entry from the Firebase Database with the key.
-    this.CardsRef.remove(key).catch(function(error) {
+    this.CardsRef.child(key).remove();/*.catch(function(error) {
       console.error('Error deleteing a card from Firebase Database', error);
-    });
-  }*/
+    });*/
+    // Remove the card from list
+    var $target = $('.'+key);
+    $target.remove();
+    //$target.hide(function(){ $target.remove(); });
+  }
 };
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
@@ -235,14 +233,11 @@ Dash.prototype.displayCard = function(key, task, notes, seconds) {
   var div = document.getElementById(key);
   // If an element for that Card does not exists yet we create it.
   if (!div) {
-    /*var container = document.createElement('div');
-    container.innerHTML = Dash.Card_TEMPLATE;
-    div = container.firstChild;
-    div.setAttribute('id', key);
-    this.CardList.appendChild(div);*/
     //--------TODO: update old method of creating new card to using Card_TEMPLATE
     var myCol = $('<div class="col-sm-4 col-md-2 sprintCard mx-auto" id="'+key+'"></div>');
-    var myPanel = $('<div class="card" id="'+key+'Panel"> <div class="card-block"> <input class="form-control task" type="text"/> </div><div class="card-block"> <input type="text" id="'+key+'duration" name="duration"> </div><div class="card-block card-notes-section"> <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div></div><div class="card-block card-buttons-section"> <div class="row"> <button type="button" class="btn card-buttons close" data-target="#'+key+'Panel" data-dismiss="alert" id="'+key+'close"> <i class="fa fa-remove"></i> </button> </div></div></div>')
+    //var myPanel = $('<div class="card" id="'+key+'Panel"> <div class="card-block"> <input class="form-control task" type="text"/> </div><div class="card-block"> <input type="text" id="'+key+'duration" name="duration"> </div><div class="card-block card-notes-section"> <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div></div><div class="card-block card-buttons-section"> <div class="row"> <button type="button" class="btn card-buttons close" id="'+key+'close"> <i class="fa fa-remove"></i> </button> </div></div></div>')
+
+    var myPanel = $('<div class="card" id="'+key+'Panel"> <div class="card-block"> <input class="form-control task" type="text"/> </div><div class="card-block"> <input type="text" id="'+key+'duration" name="duration"> </div><div class="card-block card-notes-section"> <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div></div><div class="card-block card-buttons-section"> <div class="row"> <button type="button" class="btn card-buttons close" data-target="#'+key+'" data-dismiss="alert" id="'+key+'close"> <i class="fa fa-remove"></i> </button> </div></div></div>')
     myPanel.appendTo(myCol);
     myCol.insertBefore('#newCardEditor');
     //initialize timepicker for each new card and assign unique ids for hours and minutes sections
@@ -270,11 +265,22 @@ Dash.prototype.displayCard = function(key, task, notes, seconds) {
         responsive: true
     });
     //initialize close button
-    $('.close').onclick = this.closeCard(key);
-    //$('.close').on('click', this.closeCard(e, key));
-    //$('.close').addEventListener('click', this.saveCard.bind(this));
+
+    //document.getElementById(key+"close").addEventListener('click', this.closeCard.bind(key));
+    //Add event listener for removing the card from database TODO: consider seperate this to a function
+    document.getElementById(key+"close").addEventListener('click', function(e) {
+      e.preventDefault(); 
+      //delete from database
+      if (Dash.checkSignedInWithMessage()) {
+        // Delete the Card entry from the Firebase Database with the key.
+        Dash.CardsRef.child(key).remove().catch(function(error) {
+          console.error('Error deleteing a card from Firebase Database', error);
+        });
+      }
+    }, false);
     div = myCol;
   }
+  //Populate data TODO: consider seperate this to a function
   if(task) {
     $("#"+key+" .task").val(task);
     //div.querySelector('.task').textContent = task;
@@ -305,9 +311,17 @@ Dash.prototype.getDurationInputInSeconds = function() {
   var seconds = $('#duration-seconds').val();
   seconds = seconds ? parseInt(seconds) : 0
 
-  /*var hours = parseInt($('#duration-hours').val());
-  var minutes = parseInt($('#duration-minutes').val());
-  var seconds = parseInt($('#duration-seconds').val());*/
+  return hours*3600+minutes*60+seconds;
+}
+
+Dash.prototype.getDurationInputInSecondsWithKey = function(key) {
+  var hours =  $('#duration-hours'+key).val();
+  hours = hours ? parseInt(hours) : 0
+  var minutes = $('#duration-minutes'+key).val();
+  minutes = minutes ? parseInt(minutes) : 0
+  var seconds = $('#duration-seconds'+key).val();
+  seconds = seconds ? parseInt(seconds) : 0
+
   return hours*3600+minutes*60+seconds;
 }
 
@@ -328,3 +342,24 @@ Dash.prototype.toggleButton = function() {
 window.onload = function() {
   window.Dash = new Dash();
 };
+
+setInterval(function() {
+  //find first card
+  var firstCard = $( ".sprintCard" ).first();
+  if (firstCard!=null&&(!firstCard.is("#newCardEditor"))) {
+    var key = firstCard.attr('id');
+    var seconds = Dash.getDurationInputInSecondsWithKey(key);
+    if (Dash.checkSignedInWithMessage()) {
+      if (seconds>0) {
+        //update card's duration on the database
+        Dash.CardsRef.child(key).update({ seconds: seconds-1 }).catch(function(error) {
+          console.error("Error updating a card's duration to Firebase Database", error);
+        });
+      }
+      else {
+        //close the card when time is up
+        $('#'+key+'close').click();
+      }
+    }
+  }
+}, 1000);
