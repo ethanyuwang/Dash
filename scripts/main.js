@@ -5,8 +5,6 @@ function Dash() {
   //this.checkSetup();
 
   // Shortcuts to DOM Elements.
-  this.CardList = document.getElementById('Cards');
-  
   this.CardForm = document.getElementById('newCardEditor');
   this.submitButton = document.getElementById('submit');
   this.pauseButton = document.getElementById('pause');
@@ -19,12 +17,13 @@ function Dash() {
 
   // Saves Card on form submit.
   this.submitButton.addEventListener('click', this.saveCard.bind(this));
-  this.pauseButton.addEventListener('click', this.pauseToggle.bind(this));
   this.signOutButton.addEventListener('click', this.signOut.bind(this));
   this.signInButton.addEventListener('click', this.signIn.bind(this));
+  this.pauseButton.addEventListener('click', this.togglePause.bind(this));
 
   //control status
   this.paused = false;
+  this.cardCount = 0;
 
   // Toggle for the button. TODO:???
   //var buttonTogglingHandler = this.toggleButton.bind(this);
@@ -73,11 +72,14 @@ Dash.prototype.saveCard = function(e) {
   if (this.checkCardInput() && this.checkSignedInWithMessage()) {
     var currentUser = this.auth.currentUser;
     // Add a new Card entry to the Firebase Database.
+    var task = $('#taskInput').val();
+    var seconds = this.getDurationInputInSeconds();
+    var notes= $('#notesInput').val();
     this.CardsRef.push({
       name: currentUser.displayName,
-      task: $('#taskPanel').val(),
+      task: $('#taskInput').val(),
       seconds: this.getDurationInputInSeconds(),
-      notes: $('#notesPanel').val()
+      notes: $('#notesInput').val()
     }).then(function() {
       // Clear Card text field and SEND button state.
       Dash.resetNewCardEditor(this.CardForm);
@@ -86,12 +88,6 @@ Dash.prototype.saveCard = function(e) {
       console.error('Error writing new Card to Firebase Database', error);
     });
   }
-};
-
-// Pause counter or resume counter
-Dash.prototype.pauseToggle = function() {
-  this.pausing = !this.pausing;
-  $(this).find('i').toggleClass('fa-pause fa-play');
 };
 
 // Signs-in Friendly Chat.
@@ -105,6 +101,17 @@ Dash.prototype.signIn = function() {
 Dash.prototype.signOut = function() {
   // Sign out of Firebase.
   this.auth.signOut();
+};
+
+Dash.prototype.togglePause = function() {
+  // Pause/resume countdown
+  this.paused = !this.paused;
+  //this.pauseButton.getElementById('btnPauseIcon').toggleClass
+  //var button = $('.btnPauseIcon');
+  //button.toggleClass('fa-pause fa-play');
+  //TODO: toggle icon
+  $('.btnPauseIcon').toggleClass('fa-pause');
+  $('.btnPauseIcon').toggleClass('fa-play');
 };
 
 // close a card
@@ -176,7 +183,7 @@ Dash.prototype.checkSignedInWithMessage = function() {
     Card: 'You must sign-in first',
     timeout: 2000
   };
-  this.signInSnackbar.MaterialSnackbar.showSnackbar(data);
+  //this.signInSnackbar.MaterialSnackbar.showSnackbar(data);
   return false;
 };
 
@@ -218,12 +225,38 @@ Dash.prototype.resetNewCardEditor = function(element) {
 };
 
 // TODO: update Template for Cards.
-Dash.Card_TEMPLATE =
-    '<div class="Card-container">' +
-      '<div class="spacing"><div class="pic"></div></div>' +
-      '<div class="Card"></div>' +
-      '<div class="name"></div>' +
-    '</div>';
+
+Dash.prototype.newCardHTML = function(key) {
+
+  var Card_COLOR_CLASSES = ["bg-primary", "bg-warning", "bg-success", "bg-danger"];
+  var Card_ICON_CLASSES = ["fa-grav", "fa-bolt", "fa-diamond", "fa-code", "fa-beer", "fa-telegram", "fa-superpowers", "fa-heartbeat"];
+
+  var cardColor = Card_COLOR_CLASSES[this.cardCount%Card_COLOR_CLASSES.length];
+  var cardIcon = Card_ICON_CLASSES[this.cardCount%Card_ICON_CLASSES.length];
+
+  var cardHTML = '<div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn" id="' + key + '">' +
+                    '<div class="card text-white ' + cardColor + ' o-hidden h-100">' +
+                      '<div class="card-body">' +
+                        '<div class="card-body-icon">' +
+                          '<i class="fa fa-fw ' + cardIcon + ' "></i>' +
+                        '</div>' +
+                        '<div class="mr-5">' +
+                          '<input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100 task"></input>' +
+                          '<textarea class="form-control transparent-input text-white o-hidden h-100 notes" rows="3"></textarea>' +          
+                        '</div>' +
+                      '</div>' +
+                      '<div class="card-footer text-white clearfix small z-1">' +
+                        '<span class="card-block card-duration-section">'+
+                          '<input type="text" id="duration'+key+'" name="duration">' +
+                        '</span>' +
+                        '<button type="button" class="btn text-white card-buttons close" data-target="#'+key+'" data-dismiss="alert" id=close'+key+'>' + 
+                          '<i class="fa fa-remove"></i>' + 
+                        '</button>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>';
+  return cardHTML;
+};
 
 // A loading image URL.
 Dash.LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif';
@@ -233,15 +266,11 @@ Dash.prototype.displayCard = function(key, task, notes, seconds) {
   var div = document.getElementById(key);
   // If an element for that Card does not exists yet we create it.
   if (!div) {
-    //--------TODO: update old method of creating new card to using Card_TEMPLATE
-    var myCol = $('<div class="col-sm-4 col-md-2 sprintCard mx-auto" id="'+key+'"></div>');
-    //var myPanel = $('<div class="card" id="'+key+'Panel"> <div class="card-block"> <input class="form-control task" type="text"/> </div><div class="card-block"> <input type="text" id="'+key+'duration" name="duration"> </div><div class="card-block card-notes-section"> <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div></div><div class="card-block card-buttons-section"> <div class="row"> <button type="button" class="btn card-buttons close" id="'+key+'close"> <i class="fa fa-remove"></i> </button> </div></div></div>')
-
-    var myPanel = $('<div class="card" id="'+key+'Panel"> <div class="card-block"> <input class="form-control task" type="text"/> </div><div class="card-block"> <input type="text" id="'+key+'duration" name="duration"> </div><div class="card-block card-notes-section"> <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div></div><div class="card-block card-buttons-section"> <div class="row"> <button type="button" class="btn card-buttons close" data-target="#'+key+'" data-dismiss="alert" id="'+key+'close"> <i class="fa fa-remove"></i> </button> </div></div></div>')
-    myPanel.appendTo(myCol);
-    myCol.insertBefore('#newCardEditor');
+    var myDiv = $(this.newCardHTML(key));
+    this.cardCount++;
+    myDiv.insertBefore('#newCardEditor');
     //initialize timepicker for each new card and assign unique ids for hours and minutes sections
-    $("#"+key+"duration").durationPicker({
+    $("#duration"+key).durationPicker({
         hours: {
             label: "h",
             min: 0,
@@ -268,7 +297,7 @@ Dash.prototype.displayCard = function(key, task, notes, seconds) {
 
     //document.getElementById(key+"close").addEventListener('click', this.closeCard.bind(key));
     //Add event listener for removing the card from database TODO: consider seperate this to a function
-    document.getElementById(key+"close").addEventListener('click', function(e) {
+    document.getElementById("close"+key).addEventListener('click', function(e) {
       e.preventDefault(); 
       //delete from database
       if (Dash.checkSignedInWithMessage()) {
@@ -278,7 +307,7 @@ Dash.prototype.displayCard = function(key, task, notes, seconds) {
         });
       }
     }, false);
-    div = myCol;
+    div = myDiv;
   }
   //Populate data TODO: consider seperate this to a function
   if(task) {
@@ -343,9 +372,11 @@ window.onload = function() {
   window.Dash = new Dash();
 };
 
+//TODO: fix seconds*2
 setInterval(function() {
   //find first card
-  var firstCard = $( ".sprintCard" ).first();
+  if (Dash.paused) return;
+  var firstCard = $( ".cardColumn" ).first();
   if (firstCard!=null&&(!firstCard.is("#newCardEditor"))) {
     var key = firstCard.attr('id');
     var seconds = Dash.getDurationInputInSecondsWithKey(key);
@@ -363,3 +394,28 @@ setInterval(function() {
     }
   }
 }, 1000);
+
+
+
+/*Dash.Card_TEMPLATE =
+    '<div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn">' +
+      '<div class="card text-white bg-danger o-hidden h-100">' +
+        '<div class="card-body">' +
+          '<div class="card-body-icon">' +
+            '<i class="fa fa-fw fa-list"></i>' +
+          '</div>' +
+          '<div class="mr-5">' +
+            '<input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100 task" placeholder="Your next task" ></input>' +
+            '<textarea class="form-control transparent-input text-white o-hidden h-100 task" rows="3" placeholder="Add some notes..." ></textarea>' +          
+          '</div>' +
+        '</div>' +
+        '<div class="card-footer text-white clearfix small z-1">' +
+          '<span class="card-block card-duration-section">'+
+            '<input type="text" id="duration" name="duration">' +
+          '</span>' +
+          '<button type="button" class="btn text-white card-buttons close" id="submit">' + 
+            '<i class="fa fa-plus"></i>' + 
+          '</button>' =
+        '</div>' =
+      '</div>' +
+    '</div>';*/

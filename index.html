@@ -1,203 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Ethan Wang">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Dash</title>
+    <meta name="description" content="">
+    <meta name="author" content="Ethan Wang">
+    <title>Dash - Dahs through your projects</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Custom CSS -->
-  <link href="styles/main.css" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-  <!-- Custom Fonts -->
-  <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <!-- Plugin CSS -->
+    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
-  <!-- Disable tap highlight on IE -->
-  <meta name="msapplication-tap-highlight" content="no">
+    <!-- Custom styles for this template -->
+    <link href="styles/main.css" rel="stylesheet">
 
-  <!-- Web Application Manifest -->
-  <link rel="manifest" href="manifest.json">
+  </head>
 
-  <!-- Add to homescreen for Chrome on Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Friendly Chat">
-  <meta name="theme-color" content="#303F9F">
+  <body class="fixed-nav" id="page-top">
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Friendly Chat">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <a class="navbar-brand" href="#">Dash</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <div hidden id="user-pic"></div>
+            <div hidden id="user-name"></div>
+            <a class="nav-link" data-toggle="modal" data-target="#exampleModal" id="sign-in">
+              <i class="fa fa-fw fa-sign-in"></i>
+              Sign-in with Google</a>
+            <a hidden class="nav-link" data-toggle="modal" data-target="#exampleModal" id="sign-out">
+              <i class="fa fa-fw fa-sign-out"></i>
+              Sign-out</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <!-- Tile icon for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
-  <meta name="msapplication-navbutton-color" content="#303F9F">
+    <div class="content-wrapper py-3">
 
-</head>
+      <div class="container-fluid text-vertical-center">
 
-<body>
-  <!-- Navigation -->
-  <div id="user-container">
-    <div hidden id="user-pic"></div>
-    <div hidden id="user-name"></div>
-    <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-      Sign-out
-    </button>
-    <button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-      <i class="material-icons">account_circle</i>Sign-in with Google
-    </button>
-  </div>
-  <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-  <nav id="sidebar-wrapper">
-    <ul class="sidebar-nav">
-      <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-      <li class="sidebar-brand">
-        <a href="https://github.com/ethanyuwang/Sprints-for-the-Day" onclick=$("#menu-close").click();>Github</a>
-      </li>
-      <li>
-        <a href="https://www.linkedin.com/in/ethan-wang-0b018b137/" onclick=$("#menu-close").click();>Contact</a>
-      </li>
-      <li>
-        <a href="http://ethanxyz.com/" onclick=$("#menu-close").click();>Author</a>
-      </li>
-      <li>
-        <button type="button" class="btn card-buttons" id="btnReset">
-          <i class="fa fa-undo" id="btnResetIcon"></i>
-        </button>
-      </li>
-    </ul>
-  </nav>
+        <!-- Icon Cards -->
+        <div class="row">
 
-   <!-- Main -->
-    <main id="top" class="header">
-        <div class="text-vertical-center">
-            <div class="row mx-auto" id="contentPanel">
-                <!-- insert new dynamic cards here -->
-                
-                <!-- last card as the new card editor interface -->
-                <div class="col-sm-4 col-md-2 sprintCard mx-auto" id='newCardEditor'>
-                    <div class="card mx-auto" id='lastCard'>
-                        <div class="card-block card-task-section">
-                            <input class="form-control" type="text" id="taskPanel" placeholder="New Task" />
-                        </div>
-                        <div class="card-block card-duration-section">
-                            <input type="text" id="duration" name="duration">
-                        </div>
-                        <div class="card-block card-notes-section">
-                            <div class="form-group">
-                                <textarea class="form-control" id="notesPanel" rows="5" placeholder="Some notes.."></textarea>
-                            </div>
-                        </div>
-                        <div class="card-block card-buttons-section">
-                            <div class="row">
-                                <button type="button" class="btn card-buttons" id="submit">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn" id="fakeCard1">
+            <div class="card text-white bg-primary o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fa fa-fw fa-superpowers"></i>
                 </div>
-            </div> 
-            <div class="row mx-auto">
-                <div class="col-sm-1 col-md-1 mx-auto">
-                    <button type="button" class="btn card-buttons" id="pause">
-                        <i class="fa fa-pause" id="btnPauseIcon"></i>
-                    </button>
-                </div> 
-            </div>             
+                <div class="mr-5">
+                  <input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100 task" value = "Finish CS171 Project"></input>
+                  <textarea class="form-control transparent-input text-white o-hidden h-100 notes" rows="3">Todo: fix deadlock</textarea>
+                </div>
+              </div>
+              <div class="card-footer text-white clearfix small z-1">
+                <span>
+                  <div class="durationpicker-container form-control"><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="24" placeholder="0" type="number" id="duration-hoursfakeCard1" class="durationpicker-duration" value = 2><span class="durationpicker-label">h</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-minutesfakeCard1" class="durationpicker-duration" value = 10><span class="durationpicker-label">m</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-secondsfakeCard1" class="durationpicker-duration" value = 10><span class="durationpicker-label">s</span></div></div><input type="text" style="display: none;">
+                </span>
+                <button type="button" class="btn text-white card-buttons close" data-target="#fakeCard1" data-dismiss="alert"> 
+                  <i class="fa fa-remove"></i> 
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn" id="fakeCard2">
+            <div class="card text-white bg-warning o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fa fa-fw fa-adjust"></i>
+                </div>
+                <div class="mr-5">
+                  <input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100 task" value="Start CS160 Project part1"></input>
+                  <textarea class="form-control transparent-input text-white o-hidden h-100 notes" rows="3">Use starting template from lecture ppt</textarea>
+                </div>
+              </div>
+              <div class="card-footer text-white clearfix small z-1">
+                <span>
+                  <div class="durationpicker-container form-control"><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="24" placeholder="0" type="number" id="duration-hoursfakeCard2" class="durationpicker-duration" value = 1><span class="durationpicker-label">h</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-minutesfakeCard2" class="durationpicker-duration" value = 20><span class="durationpicker-label">m</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-secondsfakeCard2" class="durationpicker-duration" value = 0><span class="durationpicker-label">s</span></div></div><input type="text" style="display: none;">
+                </span>
+                <button type="button" class="btn text-white card-buttons close" data-target="#fakeCard2" data-dismiss="alert" id="-KrrvnNsc0z9s03qeT_Bclose"> 
+                  <i class="fa fa-remove"></i> 
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn" id="fakeCard3">
+            <div class="card text-white bg-success o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fa fa-fw fa-anchor"></i>
+                </div>
+                <div class="mr-5">
+                  <input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100 task" value = "Prepare for next interview"></input>
+                  <textarea class="form-control transparent-input text-white o-hidden h-100 notes" rows="3">Review frontend stack</textarea>
+                </div>
+              </div>
+              <div class="card-footer text-white clearfix small z-1">
+                <span class="card-block card-duration-section">
+                  <div class="durationpicker-container form-control"><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="24" placeholder="0" type="number" id="duration-hoursfakeCard3" class="durationpicker-duration" value = 0><span class="durationpicker-label">h</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-minutesfakeCard3" class="durationpicker-duration" value = 50><span class="durationpicker-label">m</span></div><div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-secondsfakeCard3" class="durationpicker-duration" value = 0><span class="durationpicker-label">s</span></div></div><input type="text" style="display: none;">
+                </span>
+                <button type="button" class="btn text-white card-buttons close" data-target="#fakeCard3" data-dismiss="alert" id="-KrrvnNsc0z9s03qeT_Bclose"> 
+                  <i class="fa fa-remove"></i> 
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <!--New Card Editor-->
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 cardColumn" id = "newCardEditor">
+            <div class="card text-white bg-danger o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fa fa-fw fa-list"></i>
+                </div>
+                <div class="mr-5">
+                  <input type="text" class="form-control transparent-input text-white bg-primary o-hidden h-100" id="taskInput" placeholder="Your next task" ></input>
+                  <textarea class="form-control transparent-input text-white o-hidden h-100" id="notesInput" rows="3" placeholder="Add some notes..." ></textarea>          
+                </div>
+              </div>
+              <div class="card-footer text-white clearfix small z-1">
+                <span class="card-block card-duration-section">
+                  <input type="text" id="duration" name="duration">
+                </span>
+                <button type="button" class="btn text-white card-buttons close" id="submit"> 
+                  <i class="fa fa-plus"></i> 
+                </button>
+              </div>
+            </div>
+          </div>
+
+        <!--
+                  <div class="col-sm-4 col-md-2 sprintCard mx-auto" id="-KrrvnNsc0z9s03qeT_B">
+           <div class="card" id="-KrrvnNsc0z9s03qeT_BPanel">
+              <div class="card-block"> <input class="form-control task" type="text"> </div>
+              <div class="card-block">
+                 <div class="durationpicker-container form-control">
+                    <div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="24" placeholder="0" type="number" id="duration-hours-KrrvnNsc0z9s03qeT_B" class="durationpicker-duration"><span class="durationpicker-label">h</span></div>
+                    <div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-minutes-KrrvnNsc0z9s03qeT_B" class="durationpicker-duration"><span class="durationpicker-label">m</span></div>
+                    <div class="durationpicker-innercontainer" style="display: inline-block;"><input min="0" max="59" placeholder="0" type="number" id="duration-seconds-KrrvnNsc0z9s03qeT_B" class="durationpicker-duration"><span class="durationpicker-label">s</span></div>
+                 </div>
+                 <input type="text" id="-KrrvnNsc0z9s03qeT_Bduration" name="duration" style="display: none;"> 
+              </div>
+              <div class="card-block card-notes-section">
+                 <div class="form-group"> <textarea class="form-control notes" rows="4"> </textarea> </div>
+              </div>
+              <div class="card-block card-buttons-section">
+                 <div class="row"> <button type="button" class="btn card-buttons close" data-target="#-KrrvnNsc0z9s03qeT_B" data-dismiss="alert" id="-KrrvnNsc0z9s03qeT_Bclose"> <i class="fa fa-remove"></i> </button> </div>
+              </div>
+           </div>
         </div>
-    </main>
+        -->
+        </div>
 
-  <!-- Import and configure the Firebase SDK -->
-  <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
-  <!-- If you do not want to serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-  <script src="/__/firebase/4.1.3/firebase.js"></script>
-  <script src="/__/firebase/init.js"></script>
+        <div class="row">
+          <div class="col-sm-1 col-md-1 mx-auto">
+            <button type="button" class="btn card-buttons" id="pause">
+              <i class="fa fa-pause" id="btnPauseIcon"></i>
+            </button>
+          </div>
+        </div> 
 
-  <script src="scripts/main.js"></script>
+  
+      </div>
+      <!-- /.container-fluid -->
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.js"></script>
-  <script src="vendor/tether/tether.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    </div>
+    <!-- /.content-wrapper -->
 
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-  <!-- costum plugins -->
-  <script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
-  <script> Sortable.create(contentPanel, {filter: "#lastCard"}); </script>
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 
-  <!-- TODO: have to load jquery again to not have Uncaught TypeError: Cannot read property 'Responsive' of undefined  -->
-  <script src="vendor/jquery/jquery.js"></script>
-  <script src="scripts/duration-picker.js"></script>
-  <script>$("#duration").durationPicker();</script>
+    <!-- Custom scripts for this template -->
+    <script src="scripts/navigation.js"></script>
+    <script src="scripts/main.js"></script>
+    <!-- TODO: have to load jquery again to not have Uncaught TypeError: Cannot read property 'Responsive' of undefined  -->
+    <script src="vendor/jquery/fixResponsive/jquery.js"></script>
+    <script src="scripts/duration-picker.js"></script>
+    <script>$("#duration").durationPicker();</script>
+
+    <!-- Import and configure the Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyD5wt-F-a3CjEYVOjaXgyRCTVc5iS2mvSw",
+        authDomain: "dash-651e7.firebaseapp.com",
+        databaseURL: "https://dash-651e7.firebaseio.com",
+        projectId: "dash-651e7",
+        storageBucket: "dash-651e7.appspot.com",
+        messagingSenderId: "303116377423"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+    <!-- If you do not want to serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+    <!-- 
+    <script src="/__/firebase/4.1.3/firebase.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    -->
 
 
-  <!-- Custom Theme JavaScript TODO: move to js-->
-  <script>
-  // Closes the sidebar menu
-  $("#menu-close").click(function(e) {
-    e.preventDefault();
-    $("#sidebar-wrapper").toggleClass("active");
-  });
-  // Opens the sidebar menu
-  $("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#sidebar-wrapper").toggleClass("active");
-  });
-  // Scrolls to the selected menu item on the page
-  $(function() {
-    $('a[href*=#]:not([href=#],[data-toggle],[data-target],[data-slide])').click(function() {
-      if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
-        var target = $(this.hash);
-        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-        if (target.length) {
-          $('html,body').animate({
-            scrollTop: target.offset().top
-          }, 1000);
-          return false;
-        }
-      }
-    });
-  });
-  //#to-top button appears after scrolling
-  var fixed = false;
-  $(document).scroll(function() {
-    if ($(this).scrollTop() > 250) {
-      if (!fixed) {
-        fixed = true;
-        // $('#to-top').css({position:'fixed', display:'block'});
-        $('#to-top').show("slow", function() {
-          $('#to-top').css({
-            position: 'fixed',
-            display: 'block'
-          });
-        });
-      }
-    } else {
-      if (fixed) {
-        fixed = false;
-        $('#to-top').hide("slow", function() {
-          $('#to-top').css({
-            display: 'none'
-          });
-        });
-      }
-    }
-  });
-  </script>
+  </body>
 
-</body>
 </html>

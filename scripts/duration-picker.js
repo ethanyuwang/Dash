@@ -40,6 +40,9 @@
             window.addEventListener('resize', this.resize);
         },
         resize: function() {
+        	if (this==undefined) {
+        		return
+        	}
             if (!this.settings.responsive) {
                 return
             }
